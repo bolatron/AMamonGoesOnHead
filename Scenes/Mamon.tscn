@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://mamons_tile.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/npcs/Mamon.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 13, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 20, 23 )
+
+[node name="Mamon" type="StaticBody2D"]
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 240, 0, 64, 48 )
+region_filter_clip = true
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Shape" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="dialog_mamon" type="Area2D" parent="."]
+position = Vector2( 1, 1 )
+collision_layer = 2
+collision_mask = 2
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Shape" type="CollisionShape2D" parent="dialog_mamon"]
+position = Vector2( -8, 1 )
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}

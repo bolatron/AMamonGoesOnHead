@@ -1,0 +1,143 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Scenes/player.gd" type="Script" id=1]
+[ext_resource path="res://Scenes/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Mapa.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/fg_map.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Scripts/glass.gd" type="Script" id=5]
+[ext_resource path="res://tileset.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/npc.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Scripts/npc.gd" type="Script" id=9]
+
+[sub_resource type="ConvexPolygonShape2D" id=1]
+points = PoolVector2Array( 4, 4, 12, 4, 12, 12, 4, 12 )
+
+[sub_resource type="TileSet" id=2]
+0/name = "tileset.png 0"
+0/texture = ExtResource( 6 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 48, 320, 16, 16 )
+0/tile_mode = 0
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shape_offset = Vector2( 0, 0 )
+0/shape_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+0/shape = SubResource( 1 )
+0/shape_one_way = false
+0/shape_one_way_margin = 1.0
+0/shapes = [ {
+"autotile_coord": Vector2( 0, 0 ),
+"one_way": false,
+"one_way_margin": 1.0,
+"shape": SubResource( 1 ),
+"shape_transform": Transform2D( 1, 0, 0, 1, 0, 0 )
+} ]
+0/z_index = 0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 6.6926, 1.50565 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 6.30316, 7.28255 )
+
+[sub_resource type="Animation" id=5]
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control/black:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.1, 0.9 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 32, 32 )
+
+[node name="game" type="Node2D"]
+position = Vector2( 1, 0 )
+
+[node name="bg_map" parent="." instance=ExtResource( 3 )]
+
+[node name="grass" type="TileMap" parent="."]
+tile_set = SubResource( 2 )
+cell_size = Vector2( 16, 16 )
+cell_custom_transform = Transform2D( 16, 0, 0, 16, 0, 0 )
+show_collision = true
+collision_layer = 2
+collision_mask = 2
+format = 1
+tile_data = PoolIntArray( 262160, 0, 0, 262161, 0, 0, 262162, 0, 0, 327696, 0, 0, 327697, 0, 0, 327698, 0, 0, 393232, 0, 0, 393233, 0, 0, 393234, 0, 0 )
+script = ExtResource( 5 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 256, 32 )
+collision_layer = 5
+script = ExtResource( 1 )
+
+[node name="Area2D2" type="Area2D" parent="player"]
+collision_layer = 6
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player/Area2D2"]
+position = Vector2( -0.50058, 4.83879 )
+shape = SubResource( 3 )
+
+[node name="fg_map" parent="." instance=ExtResource( 4 )]
+
+[node name="house_enter" type="Area2D" parent="fg_map"]
+position = Vector2( 1, 3 )
+collision_layer = 2
+collision_mask = 2
+
+[node name="shape" type="CollisionShape2D" parent="fg_map/house_enter"]
+position = Vector2( 231.317, -12.1861 )
+shape = SubResource( 4 )
+
+[node name="sceneChanger" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="sceneChanger"]
+margin_right = 320.0
+margin_bottom = 240.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="black" type="ColorRect" parent="sceneChanger/Control"]
+modulate = Color( 0, 0, 0, 0.010183 )
+anchor_right = 8.0
+anchor_bottom = 6.0
+margin_left = 1.23567
+margin_top = -68.314
+margin_right = -2058.76
+margin_bottom = -1200.31
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="anim" type="AnimationPlayer" parent="sceneChanger"]
+anims/fade = SubResource( 5 )
+
+[node name="npc" parent="." instance=ExtResource( 7 )]
+position = Vector2( 490.918, 30.3431 )
+script = ExtResource( 9 )
+
+[node name="interact_area" type="Area2D" parent="npc"]
+collision_layer = 4
+collision_mask = 4
+
+[node name="area" type="CollisionShape2D" parent="npc/interact_area"]
+shape = SubResource( 6 )
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[connection signal="end_dialogue" from="player" to="npc" method="_on_player_end_dialogue"]
+[connection signal="start_dialogue" from="player" to="npc" method="_on_player_start_dialogue"]
+[connection signal="body_entered" from="player/Area2D2" to="grass" method="_on_Area2D2_body_entered"]
+[connection signal="area_shape_entered" from="fg_map/house_enter" to="player" method="_on_house_enter_area_shape_entered"]
+[connection signal="body_exited" from="npc/interact_area" to="player" method="_on_interact_area_body_exited"]

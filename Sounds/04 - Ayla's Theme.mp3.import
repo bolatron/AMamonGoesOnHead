@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/04 - Ayla's Theme.mp3-2bb3a24e14cec383d6516ca21a725a81.mp3str"
+
+[deps]
+
+source_file="res://Sounds/04 - Ayla's Theme.mp3"
+dest_files=[ "res://.import/04 - Ayla's Theme.mp3-2bb3a24e14cec383d6516ca21a725a81.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0
